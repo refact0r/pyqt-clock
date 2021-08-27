@@ -4,49 +4,47 @@ class Stopwatch():
 
     def __init__(self, clock):
         self.clock = clock
-        self.stopwatch_time = 0
+        self.time = 0
         self.started = False
-        self.stopwatch_timer = QTimer(clock)
-        self.stopwatch_timer.timeout.connect(self.updateStopwatchTime)
+        self.timer = QTimer(clock)
+        self.timer.timeout.connect(self.updateStopwatch)
 
-    def startStopwatch(self):
+    def start(self):
         if not self.started:
-            self.stopwatch_timer.start(100)
+            self.timer.start(10)
             self.clock.ui.stopwatch_start_button.setText("Stop")
             self.started = True
         else:
-            self.stopwatch_timer.stop()
+            self.timer.stop()
             self.clock.ui.stopwatch_start_button.setText("Start")
             self.started = False
 
-    def resetStopwatch(self):
-        self.stopwatch_timer.stop()
+    def reset(self):
+        self.timer.stop()
         self.clock.ui.stopwatch_start_button.setText("Start")
         self.started = False
-        self.stopwatch_time = 0
-        self.updateStopwatch()
+        self.time = 0
+        self.updateText(True)
 
-    def updateStopwatch(self):
-        tenths = self.stopwatch_time % 10
-        seconds = self.stopwatch_time // 10
+    def updateText(self, precision):
+        if precision:
+            decimal = self.time % 100
+        else:
+            decimal = self.time // 10 % 10
+        seconds = self.time // 100
         minutes = seconds // 60
         hours = minutes // 60
 
-        string = f"{seconds}.{tenths}"
+        string = f"{seconds}.{decimal:02d}"
         if minutes:
-            string = f"{minutes}:{self.formatTime(seconds % 60)}.{tenths}"
+            string = f"{minutes}:{seconds % 60:02d}.{decimal:02d}"
         if hours:
-            string = f"{hours}:{self.formatTime(minutes % 60)}:{self.formatTime(seconds % 60)}.{tenths}"
+            string = f"{hours}:{minutes % 60:02d}:{seconds % 60:02d}.{decimal:02d}"
 
         self.clock.ui.stopwatch_label.setText(string)
 
-    def updateStopwatchTime(self):
-        self.stopwatch_time += 1
-        self.updateStopwatch()
-    
-    def formatTime(self, n):
-        if n < 10:
-            return "0" + str(n)
-        return str(n)
+    def updateStopwatch(self):
+        self.time += 1
+        self.updateText(True)
 
     

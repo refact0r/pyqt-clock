@@ -1,11 +1,13 @@
-from PyQt5 import QtWidgets
 from clock import Ui_main_widget
 from stopwatch import Stopwatch
 from timer import Timer
 
 import sys
+import time
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import QTime, QTimer, Qt
+
 
 class ClockWindow(QWidget):
 
@@ -17,28 +19,39 @@ class ClockWindow(QWidget):
         self.ui.setupUi(self)
 
         self.setWindowFlag(Qt.FramelessWindowHint)
-        self.setGeometry(0, 0, 800, 480)        
-        self.setFixedSize(800, 480)
+        self.setGeometry(0, 0, 800, 480)
+        # self.setFixedSize(800, 480)
+        self.showMaximized()
+        # self.showFullScreen()
 
         # set pointer for buttons
         for button in self.ui.page_buttons_frame.findChildren(QtWidgets.QPushButton):
             button.setCursor(Qt.PointingHandCursor)
 
-        # set page buttons 
-        self.ui.clock_button.clicked.connect(lambda: self.ui.pages_widget.setCurrentIndex(0))
-        self.ui.alarm_button.clicked.connect(lambda: self.ui.pages_widget.setCurrentIndex(1))
-        self.ui.stopwatch_button.clicked.connect(lambda: self.ui.pages_widget.setCurrentIndex(2))
-        self.ui.timer_button.clicked.connect(lambda: self.ui.pages_widget.setCurrentIndex(3))
+        # set page buttons
+        self.ui.clock_button.clicked.connect(
+            lambda: self.ui.pages_widget.setCurrentIndex(0))
+        self.ui.alarm_button.clicked.connect(
+            lambda: self.ui.pages_widget.setCurrentIndex(1))
+        self.ui.stopwatch_button.clicked.connect(
+            lambda: self.ui.pages_widget.setCurrentIndex(2))
+        self.ui.timer_button.clicked.connect(
+            lambda: self.ui.pages_widget.setCurrentIndex(3))
 
         # set clock timer
         self.clock_timer = QTimer(self)
         self.clock_timer.timeout.connect(self.showTime)
-        self.clock_timer.start(1000)
+        start = QTime.currentTime().second()
+        while True:
+            if QTime.currentTime().second() != start:
+                time.sleep(0.01)
+                self.clock_timer.start(1000)
+                break
 
         # initialize stopwatch
         self.stopwatch = Stopwatch(self)
-        self.ui.stopwatch_start_button.clicked.connect(lambda: self.stopwatch.startStopwatch())
-        self.ui.stopwatch_reset_button.clicked.connect(lambda: self.stopwatch.resetStopwatch())
+        self.ui.stopwatch_start_button.clicked.connect(self.stopwatch.start)
+        self.ui.stopwatch_reset_button.clicked.connect(self.stopwatch.reset)
 
         self.timer = Timer(self)
         self.ui.timer_0_button.clicked.connect(lambda: self.timer.inputTime(0))
@@ -51,8 +64,10 @@ class ClockWindow(QWidget):
         self.ui.timer_7_button.clicked.connect(lambda: self.timer.inputTime(7))
         self.ui.timer_8_button.clicked.connect(lambda: self.timer.inputTime(8))
         self.ui.timer_9_button.clicked.connect(lambda: self.timer.inputTime(9))
-        self.ui.timer_delete_button.clicked.connect(lambda: self.timer.deleteInput())
-        self.ui.timer_start_button.clicked.connect(lambda: self.timer.inputTime(9))
+        self.ui.timer_delete_button.clicked.connect(self.timer.deleteInput)
+        self.ui.timer_start_button.clicked.connect(self.timer.start)
+        self.ui.timer_stop_button.clicked.connect(self.timer.stop)
+        self.ui.timer_reset_button.clicked.connect(self.timer.reset)
 
     def showTime(self):
         current_time = QTime.currentTime()
@@ -60,6 +75,7 @@ class ClockWindow(QWidget):
         self.ui.clock_time_label.setText(current_time.toString("h:mm ap")[:-3])
         self.ui.clock_seconds_label.setText(current_time.toString("ss"))
         self.ui.clock_ampm_label.setText(current_time.toString("ap").lower())
+
 
 App = QApplication(sys.argv)
 window = ClockWindow()
