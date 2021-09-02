@@ -104,6 +104,7 @@ class Timer():
                 list = [clean[i - 2:i]] + list
         self.input = ":".join(list)
 
+
 class SoundThread(QThread):
     play = None
 

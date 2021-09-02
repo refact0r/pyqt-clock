@@ -1,12 +1,13 @@
 from clock import Ui_main_widget
 from stopwatch import Stopwatch
 from timer import Timer
+from alarm import Alarm
 
 import sys
 import time
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget
-from PyQt5.QtCore import QTime, QTimer, Qt
+from PyQt5.QtCore import QTime, QTimer, Qt, QDateTime
 
 
 class ClockWindow(QWidget):
@@ -48,11 +49,17 @@ class ClockWindow(QWidget):
                 self.clock_timer.start(1000)
                 break
 
+        # initialize alarm
+        self.alarm = Alarm(self)
+        self.ui.alarm_snooze_button.clicked.connect(self.alarm.snooze)
+        self.ui.alarm_dismiss_button.clicked.connect(self.alarm.dismiss)
+
         # initialize stopwatch
         self.stopwatch = Stopwatch(self)
         self.ui.stopwatch_start_button.clicked.connect(self.stopwatch.start)
         self.ui.stopwatch_reset_button.clicked.connect(self.stopwatch.reset)
 
+        # initialize timer
         self.timer = Timer(self)
         self.ui.timer_0_button.clicked.connect(lambda: self.timer.inputTime(0))
         self.ui.timer_1_button.clicked.connect(lambda: self.timer.inputTime(1))
@@ -70,9 +77,14 @@ class ClockWindow(QWidget):
         self.ui.timer_reset_button.clicked.connect(self.timer.reset)
 
     def showTime(self):
-        current_time = QTime.currentTime()
+        current_time = QDateTime.currentDateTime()
 
-        self.ui.clock_time_label.setText(current_time.toString("h:mm ap")[:-3])
+        for a in self.alarm.alarms:
+            if current_time.time().secsTo(a[0]) == 0 and current_time.toString("ddd") in a[1]:
+                self.alarm.start(a)
+
+        self.ui.clock_hour_label.setText(current_time.toString("h ap")[:-3])
+        self.ui.clock_minute_label.setText(current_time.toString("mm ap")[:-3])
         self.ui.clock_seconds_label.setText(current_time.toString("ss"))
         self.ui.clock_ampm_label.setText(current_time.toString("ap").lower())
 

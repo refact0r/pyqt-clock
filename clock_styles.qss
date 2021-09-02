@@ -4,13 +4,13 @@
 
 QLabel {
     font-size: 15pt;
-    font-family: "Roboto Mono";
+    font-family: "Roboto Mono Light";
     color: #AAAAAA;
 }
 
 QPushButton {
     background: #111111;
-    font-family: "Roboto Mono";
+    font-family: "Roboto Mono Light";
     font-size: 15pt;
     color: #AAAAAA;
     padding: 10px;
@@ -25,41 +25,48 @@ QPushButton:pressed {
     background: #000000;
 }
 
-#clock_time_label {
-    font-family: "Roboto Mono Light";
+#clock_hour_label, #clock_minute_label, #alarm_hour_label, #alarm_minute_label {
+    font-family: "Roboto Mono Thin";
     font-size: 150pt;
-    /* padding-bottom: 30px; */
-    padding-right: 20px;
+}
+
+#clock_minute_label, #alarm_minute_label {
+    padding-right: 30px;
+}
+
+#clock_separator_label, #alarm_separator_label {
+    font-family: "Roboto Mono Thin";
+    font-size: 100pt;
+    max-width: 40px;
+    padding-left: 25px;
+}
+
+#clock_seconds_label, #clock_ampm_label, #alarm_ampm_label {
+    font-family: "Roboto Mono ExtraLight";
+    font-size: 70pt;
 }
 
 #clock_seconds_label {
-    font-family: "Roboto Mono Light";
-    font-size: 60pt;
-    /* max-height: 100px;
-	min-width: 150px; */
-    padding-top: 50px;
+    padding-top: 60px;
     padding-bottom: 0px;
 }
 
 #clock_ampm_label {
-    font-family: "Roboto Mono Light";
-    font-size: 60pt;
-	/* min-width: 150px; */
     padding-top: 0px;
-    padding-bottom: 50px;
+    padding-bottom: 60px;
 }
 
-#stopwatch_label {
-    font-family: "Roboto Mono Light";
-    font-size: 80pt;
+#alarm_ampm_label {
+    padding-top: 90px;
+    padding-bottom: 0px;
 }
 
-#timer_time_label {
-    font-family: "Roboto Mono Light";
+#stopwatch_label, #timer_time_label {
+    font-family: "Roboto Mono ExtraLight";
     font-size: 80pt;
 }
 
 #timer_input_label {
-    font-family: "Roboto Mono Light";
+    font-family: "Roboto Mono ExtraLight";
     font-size: 40pt;
 }

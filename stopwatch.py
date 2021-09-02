@@ -1,5 +1,6 @@
 from PyQt5.QtCore import QTimer
 
+
 class Stopwatch():
 
     def __init__(self, clock):
@@ -24,13 +25,10 @@ class Stopwatch():
         self.clock.ui.stopwatch_start_button.setText("Start")
         self.started = False
         self.time = 0
-        self.updateText(True)
+        self.updateText()
 
-    def updateText(self, precision):
-        if precision:
-            decimal = self.time % 100
-        else:
-            decimal = self.time // 10 % 10
+    def updateText(self):
+        decimal = self.time % 100
         seconds = self.time // 100
         minutes = seconds // 60
         hours = minutes // 60
@@ -45,6 +43,4 @@ class Stopwatch():
 
     def updateStopwatch(self):
         self.time += 1
-        self.updateText(True)
-
-    
+        self.updateText()
