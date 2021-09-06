@@ -1,18 +1,15 @@
 * {
     border: none;
+    color: #AAAAAA !important;
+    font-family: "Roboto Mono Light";
+    font-size: 15pt;
 }
 
 QLabel {
-    font-size: 15pt;
-    font-family: "Roboto Mono Light";
-    color: #AAAAAA;
 }
 
 QPushButton {
     background: #111111;
-    font-family: "Roboto Mono Light";
-    font-size: 15pt;
-    color: #AAAAAA;
     padding: 10px;
     border-radius: 10px;
 }
@@ -69,4 +66,22 @@ QPushButton:pressed {
 #timer_input_label {
     font-family: "Roboto Mono ExtraLight";
     font-size: 40pt;
+}
+
+#alarm_list {
+    background: transparent;
+    spacing: 10px;
+    outline: none;
+    font-size: 17pt;
+}
+
+#alarm_list::item {
+    height: 54px;
+    outline: none;
+    background: transparent !important;
+    color: #AAAAAA !important;
+}
+
+#alarm_toggle_button {
+    width: 60px;
 }

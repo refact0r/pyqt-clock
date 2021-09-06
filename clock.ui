@@ -50,7 +50,7 @@
       <item>
        <widget class="QStackedWidget" name="pages_widget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="clock_widget">
          <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -279,7 +279,7 @@
                    <property name="frameShadow">
                     <enum>QFrame::Raised</enum>
                    </property>
-                   <layout class="QVBoxLayout" name="verticalLayout_8">
+                   <layout class="QHBoxLayout" name="horizontalLayout_13">
                     <property name="spacing">
                      <number>10</number>
                     </property>
@@ -296,9 +296,12 @@
                      <number>0</number>
                     </property>
                     <item>
-                     <widget class="QLabel" name="label_2">
-                      <property name="text">
-                       <string>TextLabel</string>
+                     <widget class="QListWidget" name="alarm_list">
+                      <property name="editTriggers">
+                       <set>QAbstractItemView::NoEditTriggers</set>
+                      </property>
+                      <property name="spacing">
+                       <number>10</number>
                       </property>
                      </widget>
                     </item>

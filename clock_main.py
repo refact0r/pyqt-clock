@@ -5,9 +5,18 @@ from alarm import Alarm
 
 import sys
 import time
-from PyQt5 import QtWidgets
+from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import QTime, QTimer, Qt, QDateTime
+
+
+class CustomWidget(QWidget):
+    def __init__(self, parent=None):
+        super(CustomWidget, self).__init__(parent)
+        self.button = QtWidgets.QPushButton("on")
+        lay = QtWidgets.QHBoxLayout(self)
+        lay.addWidget(self.button, alignment=QtCore.Qt.AlignRight)
+        lay.setContentsMargins(0, 0, 0, 0)
 
 
 class ClockWindow(QWidget):
@@ -22,8 +31,8 @@ class ClockWindow(QWidget):
         self.setWindowFlag(Qt.FramelessWindowHint)
         self.setGeometry(0, 0, 800, 480)
         # self.setFixedSize(800, 480)
-        self.showMaximized()
-        # self.showFullScreen()
+        # self.showMaximized()
+        self.showFullScreen()
 
         # set pointer for buttons
         for button in self.ui.page_buttons_frame.findChildren(QtWidgets.QPushButton):
@@ -54,6 +63,25 @@ class ClockWindow(QWidget):
         self.ui.alarm_snooze_button.clicked.connect(self.alarm.snooze)
         self.ui.alarm_dismiss_button.clicked.connect(self.alarm.dismiss)
 
+        self.ui.alarm_list.setSpacing(10)
+        self.ui.alarm_buttons = []
+        toggle = lambda i: lambda : self.alarm.toggle(i)
+        for i, a in enumerate(self.alarm.alarms):
+            item = QtWidgets.QListWidgetItem(a[0].toString("h:mm ap").lower() + " - " + ",".join(a[1]))
+            widget = QtWidgets.QWidget()
+
+            widgetButton = QtWidgets.QPushButton("On" if a[2] else "Off")
+            widgetButton.setObjectName("alarm_toggle_button")
+            widgetButton.clicked.connect(toggle(i))
+            self.ui.alarm_buttons.append(widgetButton)
+
+            widgetLayout = QtWidgets.QHBoxLayout()
+            widgetLayout.addWidget(widgetButton, alignment=QtCore.Qt.AlignRight)
+            widgetLayout.setContentsMargins(0, 0, 0, 0)
+            widget.setLayout(widgetLayout)
+
+            self.ui.alarm_list.addItem(item)
+            self.ui.alarm_list.setItemWidget(item, widget)
         # initialize stopwatch
         self.stopwatch = Stopwatch(self)
         self.ui.stopwatch_start_button.clicked.connect(self.stopwatch.start)
@@ -80,7 +108,7 @@ class ClockWindow(QWidget):
         current_time = QDateTime.currentDateTime()
 
         for a in self.alarm.alarms:
-            if current_time.time().secsTo(a[0]) == 0 and current_time.toString("ddd") in a[1]:
+            if current_time.time().secsTo(a[0]) == 0 and current_time.toString("ddd") in a[1] and a[2]:
                 self.alarm.start(a)
 
         self.ui.clock_hour_label.setText(current_time.toString("h ap")[:-3])
